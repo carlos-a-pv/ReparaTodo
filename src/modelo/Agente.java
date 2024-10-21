@@ -2,8 +2,8 @@ package modelo;
 
 import lombok.*;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 public class Agente extends Usuario {
 
     public String idAgente;
@@ -11,4 +11,11 @@ public class Agente extends Usuario {
     public String email;
     public String telefono;
 
+    public Agente(String idAgente, String nombre, String email, String telefono, String user, String password) {
+        super(user, password);
+        this.idAgente = idAgente;
+        this.nombre = nombre;
+        this.email = email;
+        this.telefono = telefono;
+    }
 }

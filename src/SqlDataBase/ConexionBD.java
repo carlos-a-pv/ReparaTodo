@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConexionBD {
 
     private static ConexionBD instancia;
-    private String url = "jdbc:mysql://localhost:3306/bd_proyectofinalbbdd";
+    private String url = "jdbc:mysql://localhost:3306/bd_reparatodo";
     private String usuario = "root";
     private String contraseña = "0223";
 
@@ -23,6 +23,17 @@ public class ConexionBD {
     }
 
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, usuario, contraseña);
+        Connection connection = null;
+        try {
+            // Registra el driver de MySQL
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Establece la conexión
+            connection = DriverManager.getConnection(url, usuario, contraseña);
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error: No se pudo cargar el driver de MySQL");
+            e.printStackTrace();
+        }
+        return connection;
     }
 }

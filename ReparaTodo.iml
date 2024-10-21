@@ -7,7 +7,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/resource" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/resources/resource" type="java-resource" />
-      <excludeFolder url="file://$MODULE_DIR$/src/resources" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -22,5 +21,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="lib1" level="project" />
+    <orderEntry type="library" name="lib2" level="project" />
+    <orderEntry type="library" name="mysql-connector-j-8.3.0" level="project" />
   </component>
 </module>

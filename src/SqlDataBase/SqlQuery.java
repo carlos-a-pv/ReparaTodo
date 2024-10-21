@@ -55,14 +55,18 @@ public class SqlQuery {
                 String direccion = null;
                 String telefono = null;
                 String email = null;
+                String user = null;
+                String password = null;
                 if (resultSet2.next()) {
                     resultSet2.next();
                     nombre = resultSet2.getString("nombre");
                     direccion = resultSet2.getString("direccion");
                     telefono = resultSet2.getString("telefono");
                     email = resultSet2.getString("email");
+                    user = resultSet2.getString("user");
+                    password = resultSet2.getString("password");
                 }
-                Cliente cliente = new Cliente(idCliente,nombre,email,telefono,direccion);
+                Cliente cliente = new Cliente(idCliente,nombre,email,telefono,direccion,user,password);
 
                 // Tercera consulta para obtener el producto
                 String sql3 = "SELECT * FROM bd_reparatodo.producto " +
@@ -130,7 +134,7 @@ public class SqlQuery {
 
     public static void crearOrden(Orden orden) {
 
-        String queryOrden = "INSERT INTO orden (idOrden, idCliente,idAgente, idProducto,fechaCreacion,estado,descripcionAveria) VALUES (?, ?, ?, ?,?,?,?)";
+        String queryOrden = "INSERT INTO bd_reparatodo.orden (idOrden, idCliente,idAgente, idProducto,fechaCreacion,estado,descripcionAveria) VALUES (?, ?, ?, ?,?,?,?)";
 
         try (Connection conn = ConexionBD.getInstance().getConnection()) {
             try (PreparedStatement stmtOrden = conn.prepareStatement(queryOrden)) {
@@ -148,4 +152,151 @@ public class SqlQuery {
             e.printStackTrace();
         }
     }
+
+    public static void cambiarEstadoOrden(String idOrden, Estado estadoNuevo) {
+        String query = "UPDATE bd_reparatodo.orden SET estado = ? WHERE idOrden = ?";
+
+        try (Connection conn = ConexionBD.getInstance().getConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                // Usar el valor personalizado del enum Estado
+                stmt.setString(1, String.valueOf(estadoNuevo));
+                stmt.setString(2, idOrden);
+
+                // Ejecutar la actualización
+                int filasActualizadas = stmt.executeUpdate();
+                if (filasActualizadas > 0) {
+                    System.out.println("Estado de la orden actualizado correctamente.");
+                } else {
+                    System.out.println("No se encontró una orden con el ID especificado.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void crearActividadTecnico(String idOrden, String idTecnico, String descripcion) {
+        String query = "INSERT INTO bd_reparatodo.actividad_tecnico (idOrden, idTecnico, fechaActividad, descripcion) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = ConexionBD.getInstance().getConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+
+                stmt.setString(1, idOrden);
+                stmt.setString(2, idTecnico);
+                stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                stmt.setString(4, descripcion);
+
+
+                int filasInsertadas = stmt.executeUpdate();
+                if (filasInsertadas > 0) {
+                    System.out.println("Actividad técnica creada con éxito.");
+                } else {
+                    System.out.println("No se pudo crear la actividad técnica.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void crearOrdenPago(String idOrden, Pago pago) {
+
+        String query = "INSERT INTO bd_reparatodo.actividadtecnico (idOrden,idPago,monto) VALUES (?, ?, ?)";
+
+        try (Connection conn = ConexionBD.getInstance().getConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, idOrden);
+                stmt.setString(2, pago.getIdPago());
+                stmt.setFloat(4, pago.getMonto());
+
+                int filasInsertadas = stmt.executeUpdate();
+                if (filasInsertadas > 0) {
+                    System.out.println("Actividad técnica creada con éxito.");
+                } else {
+                    System.out.println("No se pudo crear la actividad técnica.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void registrarCliente(Cliente cliente) {
+        String query = "INSERT INTO bd_reparatodo.cliente (idCliente,nombre, telefono, direccion, user, password) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = ConexionBD.getInstance().getConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, cliente.getIdCliente());
+                stmt.setString(2, cliente.getNombre());
+                stmt.setString(3, cliente.getTelefono());
+                stmt.setString(4, cliente.getDireccion());
+                stmt.setString(5, cliente.getUser());
+                stmt.setString(6, cliente.getPassword());
+
+                int filasInsertadas = stmt.executeUpdate();
+                if (filasInsertadas > 0) {
+                    System.out.println("Cliente registrado con éxito.");
+                } else {
+                    System.out.println("No se pudo registrar el cliente.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean actualizarCliente(Cliente datosNuevos,String idCliente) {
+
+        String query = "UPDATE bd_reparatodo.cliente SET nombre = ?, email = ?, telefono = ?, direccion = ? , user =? , password =? WHERE idCliente = ?";
+
+        try (Connection conn = ConexionBD.getInstance().getConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, datosNuevos.getNombre());
+                stmt.setString(2, datosNuevos.getEmail());
+                stmt.setString(3, datosNuevos.getTelefono());
+                stmt.setString(4, datosNuevos.getDireccion());
+                stmt.setString(5, datosNuevos.getUser());
+                stmt.setString(6, datosNuevos.getPassword());
+                stmt.setString(7, idCliente);
+
+                int filasActualizadas = stmt.executeUpdate();
+                if (filasActualizadas > 0) {
+                    System.out.println("Cliente actualizado con éxito.");
+                    return true;
+                } else {
+                    System.out.println("No se pudo actualizar el cliente. Verifique si el ID es correcto.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public static boolean actualizarProducto(Producto producto, String idProducto) {
+        String query = "UPDATE bd_reparatodo.producto SET tipo = ?, marca = ?, modelo = ?, descripcion = ? WHERE idProducto = ?";
+
+        try (Connection conn = ConexionBD.getInstance().getConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+
+                stmt.setString(1, producto.getTipo());
+                stmt.setString(2, producto.getMarca());
+                stmt.setString(3, producto.getModelo());
+                stmt.setString(4, producto.getDescripcion());
+                stmt.setString(5, idProducto);
+
+                // Ejecutar la actualización y verificar el resultado
+                int filasActualizadas = stmt.executeUpdate();
+                return filasActualizadas > 0;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

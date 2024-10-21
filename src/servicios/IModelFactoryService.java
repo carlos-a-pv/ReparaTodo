@@ -20,7 +20,6 @@ public interface IModelFactoryService {
     boolean actualizarCliente(Cliente datosNuevos,String idCliente);
 
     //Producto
-    boolean registrarProducto(Producto producto);
     boolean actualizaProducto(Producto datosNuevos,String idProducto);
 
 
