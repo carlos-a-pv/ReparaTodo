@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="703.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.TecnicoController">
+   <children>
+      <Label layoutX="469.0" layoutY="14.0" text="Gestión de ordenes" textFill="#170e90">
+         <font>
+            <Font name="System Bold" size="32.0" />
+         </font>
+      </Label>
+      <Separator layoutX="136.0" layoutY="61.0" prefHeight="26.0" prefWidth="835.0" />
+      <TextField layoutX="73.0" layoutY="110.0" prefHeight="40.0" prefWidth="760.0" promptText="Buscar orden...">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </TextField>
+      <Button layoutX="865.0" layoutY="110.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="106.0" style="-fx-background-color: #170e90;" text="Buscar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnRecibirOrden" layoutX="598.0" layoutY="620.0" mnemonicParsing="false" onAction="#onClickCrearTecnico" prefHeight="40.0" prefWidth="243.0" style="-fx-background-color: #170e90;" text="Recibir Orden" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+      <TableView fx:id="tbOrdenes" layoutX="73.0" layoutY="195.0" prefHeight="402.0" prefWidth="889.0">
+         <columns>
+            <TableColumn fx:id="colId" prefWidth="102.0" text="ID" />
+            <TableColumn fx:id="colProducto" prefWidth="100.0" text="Producto" />
+            <TableColumn fx:id="colCliente" prefWidth="105.0" text="Cliente" />
+            <TableColumn fx:id="colFecha" prefWidth="134.0" text="Fecha" />
+            <TableColumn fx:id="colEstado" prefWidth="129.0" text="Estado" />
+            <TableColumn fx:id="colDescripcion" prefWidth="166.0" text="Descripción" />
+            <TableColumn fx:id="colPago" prefWidth="150.0" text="Pago" />
+         </columns>
+      </TableView>
+      <Button fx:id="btnCrearActividad" layoutX="192.0" layoutY="620.0" mnemonicParsing="false" onAction="#onClickCrearActividad" prefHeight="40.0" prefWidth="243.0" style="-fx-background-color: #170e90;" text="Añadir Actividad orden" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnVolver" layoutX="875.0" layoutY="28.0" mnemonicParsing="false" onAction="#onClickVolver" prefHeight="15.0" prefWidth="106.0" style="-fx-background-color: #170e90;" text="Volver" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

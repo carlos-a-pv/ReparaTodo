@@ -6,6 +6,8 @@ import modelo.Pago;
 import modelo.Producto;
 import modelo.enums.Estado;
 
+import java.sql.SQLException;
+
 public interface IModelFactoryService {
 
     //Orden
@@ -16,7 +18,7 @@ public interface IModelFactoryService {
     boolean registrarPago(String idOrden, Pago pago);
 
     //Cliente
-    boolean registrarCliente(Cliente cliente);
+    boolean registrarCliente(Cliente cliente) throws SQLException;
     boolean actualizarCliente(Cliente datosNuevos,String idCliente);
 
     //Producto

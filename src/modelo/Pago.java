@@ -13,4 +13,10 @@ public class Pago {
     public float monto;
     public LocalDate fechaPago;
     public String metodoPago;
+
+
+    @Override
+    public String toString() {
+        return Float.toString(this.monto);
+    }
 }

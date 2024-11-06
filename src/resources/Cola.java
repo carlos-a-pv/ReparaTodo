@@ -3,6 +3,9 @@ package resources;
 import modelo.Orden;
 import modelo.enums.Estado;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @param <T>
@@ -72,7 +75,7 @@ public class Cola<T> {
      */
     public NodoCola<T> buscarNodoCola(T dato) {
         if (estaVacia()) {
-            throw new RuntimeException("La Cola estÃ¡ vacÃ­a");
+            return null;
         }
 
         NodoCola<T> aux = nodoPrimero;
@@ -283,6 +286,20 @@ public class Cola<T> {
 
         return encontrado;
     }
+
+    public List<T> obtenerLista() {
+
+        List<T> lista = new ArrayList<>();
+        NodoCola<T> aux = nodoPrimero;
+
+        while (aux != null) {
+            lista.add(aux.getValorNodo());
+            aux = aux.getSiguienteNodo();
+        }
+
+        return lista;
+    }
+
 
 
 }

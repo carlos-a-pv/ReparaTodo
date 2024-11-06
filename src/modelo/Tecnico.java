@@ -10,12 +10,12 @@ public class Tecnico extends Usuario {
 
     public String idTecnico;
     public String nombre;
-    public String Especialidad;
+    public String especialidad;
 
     public Tecnico( String idTecnico, String nombre, String especialidad, String user, String password) {
         super(user, password);
         this.idTecnico = idTecnico;
         this.nombre = nombre;
-        Especialidad = especialidad;
+        this.especialidad = especialidad;
     }
 }

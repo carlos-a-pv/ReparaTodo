@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="397.0" prefWidth="551.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.CrearTecnicoController">
+   <children>
+      <Label layoutX="163.0" layoutY="14.0" text="Registro de técnico">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="137.0" layoutY="86.0" text="ID">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="135.0" layoutY="129.0" text="Nombre">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="133.0" layoutY="174.0" text="Especialidad">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="tfId" layoutX="288.0" layoutY="87.0" />
+      <TextField fx:id="tfEspecialidad" layoutX="288.0" layoutY="174.0" />
+      <TextField fx:id="tfNombre" layoutX="288.0" layoutY="130.0" />
+      <Button fx:id="btnCrear" layoutX="141.0" layoutY="323.0" mnemonicParsing="false" onAction="#onClickCrear" style="-fx-background-color: #170e90;" text="Registrar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnCancelar" layoutX="301.0" layoutY="323.0" mnemonicParsing="false" onAction="#onClickCancelar" style="-fx-background-color: #170e90;" text="Cancelar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+      <Label layoutX="133.0" layoutY="209.0" text="Usuario">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="133.0" layoutY="247.0" text="contraseña">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="tfUser" layoutX="288.0" layoutY="210.0" />
+      <TextField fx:id="tfPassword" layoutX="288.0" layoutY="248.0" />
+   </children>
+</AnchorPane>

@@ -26,4 +26,9 @@ public class Cliente extends Usuario  {
         this.telefono = telefono;
         this.direccion = direccion;
     }
+
+    @Override
+    public String toString() {
+        return this.idCliente;
+    }
 }

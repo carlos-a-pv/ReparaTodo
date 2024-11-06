@@ -7,6 +7,7 @@ import modelo.enums.Estado;
 import resources.Cola;
 import resources.NodoCola;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +19,24 @@ public class Taller {
     public Cola<Orden> colaRepaciones;
     public List<Usuario>usuarios;
     public List<Producto> productos;
-    public Agente agenteLogeado = new Agente("01","carlos","carlos@email.com","314","carlos","123");
+    public Usuario usuarioLogeado;
+    public Orden ordenSeleccionada;
+    public Cliente clienteSeleccionado;
 
-    public Taller() {
+    public Taller()  {
+
         this.colaRepaciones = new Cola<>();
         this.usuarios = new ArrayList<>();
         this.productos = new ArrayList<>();
+
+    }
+    public void cargarDatosBD() throws SQLException {
+
+        SqlQuery.cargarOrdenes();
+        SqlQuery.cargarProductos();
+        SqlQuery.cargarClientes();
+        SqlQuery.cargarTecnicos();
+        SqlQuery.cargarAgentes();
     }
 
     public boolean crearOrden(Orden orden){
@@ -68,7 +81,8 @@ public class Taller {
         if (orden != null){
 
             cambiarEstadoOrden(idOrden,Estado.EN_REPARACION);
-            SqlQuery.crearActividadTecnico(idOrden,agenteLogeado.getIdAgente(),registroActividades);
+            Tecnico tecnico =(Tecnico) INSTACE.getModel().getUsuarioLogeado();
+            SqlQuery.crearActividadTecnico(idOrden,tecnico.getIdTecnico(),registroActividades);
             return true;
         }
         return false;
@@ -84,19 +98,17 @@ public class Taller {
         return false;
     }
 
-    public boolean registrarCliente(Cliente cliente) {
-
-        Usuario usuario = usuarios.stream().filter(cliente1 -> cliente1.getUser().equals(cliente.getUser())).findFirst().orElse(null);
-
-        if (usuario == null){
-            usuario.setUser(cliente.getUser());
-            usuario.setPassword(cliente.getPassword());
-            Cliente cliente2 = new Cliente(cliente.getIdCliente(),cliente.getNombre(),cliente.getEmail(),cliente.getTelefono(),cliente.getDireccion(),usuario.getUser(),usuario.getPassword());
-            usuarios.add(cliente2);
-            SqlQuery.registrarCliente(cliente2);
-            return true;
+    public boolean registrarCliente(Cliente cliente) throws SQLException {
+        List<Cliente> clientes = obtenerClientes();
+        for (Cliente cliente1 :clientes){
+            if (cliente1.getIdCliente().equals(cliente.getIdCliente())){
+                return false;
+            }
         }
-        return false;
+        usuarios.add(cliente);
+        SqlQuery.crearCliente(cliente);
+
+        return true;
     }
 
     public boolean actualizarCliente(Cliente datosNuevos, String idCliente) {
@@ -116,7 +128,7 @@ public class Taller {
                     .filter(usuario -> usuario instanceof Cliente)
                     .anyMatch(usuario -> !((Cliente) usuario).getIdCliente().equals(idCliente) && usuario.getUser().equals(datosNuevos.getUser()));
 
-            if (!userExists) {
+            if (userExists) {
 
                 clienteActualizado.setNombre(datosNuevos.getNombre());
                 clienteActualizado.setEmail(datosNuevos.getEmail());
@@ -125,13 +137,8 @@ public class Taller {
 
                 SqlQuery.actualizarCliente(clienteActualizado, idCliente);
                 return true;
-            } else {
-                System.out.println("El nuevo user ya existe.");
             }
-        } else {
-            System.out.println("El cliente no existe.");
         }
-
         return false;
     }
 
@@ -158,5 +165,116 @@ public class Taller {
         return actualizado;
     }
 
+    public Usuario autenticar(String user, String password) {
 
+        Usuario existe;
+
+        for (Usuario usuario : usuarios){
+            if (usuario.getUser().equals(user)&& usuario.getPassword().equals(password)){
+
+                return usuario;
+            }
+        }
+        return null;
+    }
+
+    public List<Cliente> obtenerClientes() {
+        List <Cliente> encontrados = new ArrayList<>();
+        for (Usuario cliente:usuarios){
+            if (cliente instanceof Cliente){
+                encontrados.add((Cliente) cliente);
+            }
+        }
+        return encontrados;
+    }
+    public Cliente obtenerCliente(String idCliente){
+        List<Cliente> clientes = obtenerClientes();
+        for (Cliente cliente:clientes){
+            if (cliente.getIdCliente().equals(idCliente)){
+                return cliente;
+            }
+        }
+        return null;
+    }
+
+    public Producto obtenerProducto(String idProducto) {
+        for (Producto producto : productos){
+            if (producto.getIdProducto().equals(idProducto)){
+                return producto;
+            }
+        }
+        return null;
+    }
+
+    public List<Producto> obtenerProductos() {
+        return productos;
+    }
+
+    public List<Orden> obtenerOrdenes() {
+       return colaRepaciones.obtenerLista();
+    }
+
+    public Usuario getUsuarioLogeado() {
+        return usuarioLogeado;
+    }
+
+    public void setUsuarioLogeado(Usuario usuarioLogeado) {
+        this.usuarioLogeado = usuarioLogeado;
+    }
+
+    public Orden getOrdenSeleccionada() {
+        return ordenSeleccionada;
+    }
+
+    public void setOrdenSeleccionada(Orden ordenSeleccionada) {
+        this.ordenSeleccionada = ordenSeleccionada;
+    }
+
+    public Cliente getClienteSeleccionado() {
+        return clienteSeleccionado;
+    }
+
+    public void setClienteSeleccionado(Cliente clienteSeleccionado) {
+        this.clienteSeleccionado = clienteSeleccionado;
+    }
+
+    public List<Orden> getOrdenesTecnico() throws SQLException {
+        return SqlQuery.actividadTecnico(((Tecnico)usuarioLogeado).getIdTecnico());
+    }
+
+    public boolean crearTecnico(Tecnico tecnico) throws SQLException {
+        List<Tecnico>tecnicos = obtenerTecnicos();
+
+        for (Tecnico tecnicoAux:tecnicos){
+                if (tecnicoAux.getIdTecnico().equals(tecnico.getIdTecnico())){
+                 return false;
+                }
+        }
+        usuarios.add(tecnico);
+        SqlQuery.crearTecnico(tecnico);
+        return true;
+    }
+
+    public List<Tecnico> obtenerTecnicos() {
+        List <Tecnico> encontrados = new ArrayList<>();
+        for (Usuario tecnico:usuarios){
+            if (tecnico instanceof Tecnico){
+                encontrados.add((Tecnico) tecnico);
+            }
+        }
+        return encontrados;
+    }
+
+    public List<Actividad> getActividades(String idOrden) throws SQLException {
+        return SqlQuery.actividadesOrden(idOrden);
+    }
+
+    public List<Orden> getOrdenesCliente() throws SQLException {
+        return SqlQuery.ordenesCliente(((Cliente)usuarioLogeado).getIdCliente());
+    }
+
+    public boolean crearActividad(Actividad actividad) {
+        SqlQuery.crearActividadTecnico(actividad.idOrden,actividad.idTecnico,actividad.getDescripcion());
+        return true;
+    }
 }

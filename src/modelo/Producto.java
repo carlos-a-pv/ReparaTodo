@@ -15,4 +15,8 @@ public class Producto {
     public String modelo;
     public String descripcion;
 
+    @Override
+    public String toString() {
+        return this.modelo;
+    }
 }
